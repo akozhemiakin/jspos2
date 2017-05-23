@@ -44,8 +44,6 @@ describe('Client', () => {
       const response = await client.sendRawCommand(new RawMessage(0xFC));
 
       expect(response).toBeInstanceOf(RawMessage);
-
-      expect(client._state).toBe('ready');
     });
 
     it('should request scales state and return the response', async () => {
