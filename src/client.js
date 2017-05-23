@@ -1,11 +1,10 @@
 // @flow
 import SerialPort from 'serialport';
-import EventEmitter from 'events';
 import RawMessage from './raw_message';
 import { List } from 'immutable';
 import ScalesState from './scales_state';
 
-class Client extends EventEmitter {
+class Client {
   _port: SerialPort;
   _initialized: bool = false;
   _busy = false;
@@ -15,8 +14,6 @@ class Client extends EventEmitter {
   constructor(port: SerialPort, options: {
     password?: List<number>
   } = {}) {
-    super();
-
     const opts = {
       password: List([0x00, 0x00, 0x03, 0x00]),
       ...options
