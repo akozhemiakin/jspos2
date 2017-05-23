@@ -1,3 +1,4 @@
+// @flow
 import { Record } from 'immutable';
 import RawMessage from './raw_message';
 import bytesListToInt from './util/bytes_list_to_int';

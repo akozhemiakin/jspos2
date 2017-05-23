@@ -1,3 +1,4 @@
+// @flow
 import { List, Record } from 'immutable';
 
 class RawMessage extends Record({ type: null, data: List() }) {
@@ -10,7 +11,7 @@ class RawMessage extends Record({ type: null, data: List() }) {
     this._lrc = RawMessage.calculateLRC(List([data.size + 1, type]).concat(data));
   }
 
-  get buffer(): List<number> {
+  get buffer(): Buffer {
     return Buffer.from(List([0x02, this.length, this.type], 'hex').concat(this.data).push(this.lrc).toArray());
   }
 

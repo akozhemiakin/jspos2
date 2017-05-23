@@ -1,3 +1,4 @@
+// @flow
 import { List } from 'immutable';
 
 export default (l: List<number>): number => {
