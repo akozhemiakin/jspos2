@@ -72,8 +72,10 @@ class Client {
         this._busy = false;
       };
 
-      const handleData = (data: List<number>) => {
-        mb = mb.concat(data);
+      const handleData = (data: Buffer | List<number>) => {
+        const _data = (data instanceof List) ? data : List(data.values());
+
+        mb = mb.concat(List(_data));
 
         if (mb.get(0) !== 0x02) {
           this._port.removeListener('data', handleData);
@@ -101,7 +103,7 @@ class Client {
         if (data.get(0) === 0x06) {
           const remainder = data.slice(1);
 
-          this._port.on('data', b => handleData(List(b.values())));
+          this._port.on('data', handleData);
 
           if (remainder.isEmpty() === false) {
             handleData(remainder);
