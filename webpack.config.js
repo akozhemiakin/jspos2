@@ -48,7 +48,8 @@ const config = {
     extensions: ['.json', '.js']
   },
   plugins: plugins,
-  target: 'node'
+  target: 'node',
+  externals: ['immutable', 'serialport']
 };
 
 module.exports = config;
