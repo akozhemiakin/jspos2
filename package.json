@@ -1,6 +1,6 @@
 {
   "name": "jspos2",
-  "version": "0.1.0-SNAPSHOT1",
+  "version": "0.1.0",
   "description": "Simple client for Shtrikh-M POS2 scales",
   "main": "lib/jspos2.js",
   "scripts": {
@@ -9,6 +9,11 @@
     "test": "node ./test/runner.js --colors",
     "test:watch": "node ./test/runner.js --colors --watch"
   },
+  "files": [
+    "lib",
+    "src",
+    "flow-typed"
+  ],
   "dependencies": {
     "immutable": "^3.8.1",
     "serialport": "^4.0.7"
