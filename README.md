@@ -122,3 +122,10 @@ client.sendRawCommand(requestMessage).then(response => {
   // Handle the error somehow
 })
 ```
+
+## Closing the client
+To close the client and unclaim the serial port you can use `.close` method on the instance of
+the client (it returns a Promise):
+```javascript
+client.close();
+```
