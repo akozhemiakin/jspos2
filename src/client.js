@@ -5,6 +5,8 @@ import { List } from 'immutable';
 import ScalesState from './scales_state';
 
 class Client {
+  static _defaultPassword = List([0x00, 0x00, 0x03, 0x00]);
+
   _port: SerialPort;
   _initialized: bool = false;
   _busy = false;
@@ -15,7 +17,7 @@ class Client {
     password?: List<number>
   } = {}) {
     const opts = {
-      password: List([0x00, 0x00, 0x03, 0x00]),
+      password: Client._defaultPassword,
       ...options
     };
 
@@ -130,9 +132,18 @@ class Client {
     return this.sendRawCommand(new RawMessage(0x3A, this._password)).then(r => ScalesState.fromMessage(r));
   }
 
-  static fromDeviceId(vendorId: string, productId: string, normalize: boolean = true): Promise<Client> {
+  static fromDeviceId(vendorId: string, productId: string, options: {
+    normalize?: boolean,
+    password?: List<number>
+  } = {}): Promise<Client> {
+    const opts = {
+      normalize: true,
+      password: Client._defaultPassword,
+      ...options
+    };
+
     const nid = (id: string): string[] => {
-      if (normalize === false) {
+      if (opts.normalize === false) {
         return [id];
       }
 
@@ -148,14 +159,16 @@ class Client {
           const portInfo = ports.find(p => {
             if (p.vendorId === undefined || p.productId === undefined) return false;
 
-            const vid = normalize ? p.vendorId.toLowerCase() : p.vendorId;
-            const pid = normalize ? p.productId.toLowerCase() : p.productId;
+            const vid = opts.normalize ? p.vendorId.toLowerCase() : p.vendorId;
+            const pid = opts.normalize ? p.productId.toLowerCase() : p.productId;
 
             return nid(vendorId).includes(vid) && nid(productId).includes(pid);
           });
 
           if (portInfo != null) {
-            const port = new SerialPort(portInfo.comName, {}, err => {
+            const port = new SerialPort(portInfo.comName, {
+              password: opts.password
+            }, err => {
               if (err != null) {
                 rej(err);
               } else {
