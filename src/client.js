@@ -26,6 +26,9 @@ class Client {
   }
 
   init(): Promise<void> {
+    if (this._initialized) {
+      return Promise.resolve();
+    }
     return this._handshake().then(() => {
       this._initialized = true;
     });
