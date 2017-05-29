@@ -169,13 +169,13 @@ class Client {
           });
 
           if (portInfo != null) {
-            const port = new SerialPort(portInfo.comName, {
-              password: opts.password
-            }, err => {
+            const port = new SerialPort(portInfo.comName, {}, err => {
               if (err != null) {
                 rej(err);
               } else {
-                res(new Client(port));
+                res(new Client(port, {
+                  password: opts.password
+                }));
               }
             });
           } else rej((`Failed to detect scales with vendorId ${vendorId} and productId ${productId}`));
