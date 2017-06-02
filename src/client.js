@@ -159,7 +159,7 @@ class Client {
       SerialPort.list((err, ports) => {
         if (err != null) rej(Error(err));
         else {
-          const portInfo = ports.find(p => {
+          const fports = ports.filter(p => {
             if (p.vendorId === undefined || p.productId === undefined) return false;
 
             const vid = opts.normalize ? p.vendorId.toLowerCase() : p.vendorId;
@@ -168,8 +168,8 @@ class Client {
             return nid(vendorId).includes(vid) && nid(productId).includes(pid);
           });
 
-          if (portInfo != null) {
-            const port = new SerialPort(portInfo.comName, {}, err => {
+          if (fports.length === 1) {
+            const port = new SerialPort(fports[0].comName, {}, err => {
               if (err != null) {
                 rej(err);
               } else {
@@ -178,7 +178,12 @@ class Client {
                 }));
               }
             });
-          } else rej((`Failed to detect scales with vendorId ${vendorId} and productId ${productId}`));
+          } else if (fports.length > 1) {
+            rej(new Error(`More than one device has vendorId ${vendorId} and productId ${productId}.` +
+                          'You can manually specify port using Client constructor to eliminate this ambiguity.'));
+          } else {
+            rej(new Error(`Failed to detect scales with vendorId ${vendorId} and productId ${productId}`));
+          }
         }
       });
     });
