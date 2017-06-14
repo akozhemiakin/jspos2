@@ -46,7 +46,10 @@ know your scales vendor id and product id. For example, for one of the Shtrikh-S
 is `1FC9` and `80A3` accordingly (library is clever enough to determine that in linux this ID will
 look like '0x1fc9' and in windows '1FC9', you may specify it in either form, in either case).
 This factory method takes vendor id, product id, and optional third argument with options,
-and returns Promise.
+and returns Promise. You also should be aware that if you have two devices with matching vid and pid,
+promise will be rejected. For instance, it is confirmed by Shtrikh-M engineers that
+Shtrikh-M Customer Display shares the same vid and pid with Shtrikh-M POS2 scales. In that case,
+for now, you have no other option other than to use Client constructor instead of a factory method.
 
 ```javascript
 Client.fromDeviceId('1FC9', '80A3', {
